@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+
+  postgis_realestate:
+    container_name: postgis_realestate
+    image: postgis/postgis:14-3.4
+    shm_size: 512m
+    volumes:
+      - type: volume
+        source: postgis_realestate_data
+        target: /var/lib/postgresql/data/
+      - type: bind
+        source: ./input
+        target: /input
+        read_only: true
+      - type: bind
+        source: ./work
+        target: /work
+        read_only: false
+    environment:
+      - POSTGRES_DB=pgdb
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pgpass
+    ports:
+      - 15432:5432
+
+  realestate_id_db:
+    container_name: realestate_id_db
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./input
+        target: /input
+        read_only: true
+      - type: bind
+        source: ./work
+        target: /work
+        read_only: false
+      - type: bind
+        source: ./app
+        target: /app
+        read_only: true
+
+volumes:
+    postgis_realestate_data: {}

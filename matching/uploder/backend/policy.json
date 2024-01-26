@@ -1,0 +1,62 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "arn:aws:logs:ap-northeast-1:545090809923:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:ap-northeast-1:545090809923:log-group:/aws/lambda/hello-labmda-fastapi:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::aigid-estate-id-matching-batch/*",
+                "arn:aws:s3:::aigid-estate-id-matching-batch"
+            ]
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "batch:SubmitJob"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ses:SendEmail"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cognito-idp:ListUsers"
+            ],
+            "Resource": [
+                "arn:aws:cognito-idp:ap-northeast-1:545090809923:userpool/ap-northeast-1_l4gvPnM13"
+            ]
+        }
+    ]
+}

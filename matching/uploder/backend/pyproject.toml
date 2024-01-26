@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "aigid-estate-id-labmda"
+version = "0.1.0"
+description = ""
+authors = ["Yusuke Suzuki <suzuki@mierune.co.jp>"]
+readme = "README.md"
+packages = [{include = "aigid_estate_id_labmda"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+boto3 = "^1.28.14"
+fastapi = "^0.100.1"
+mangum = "^0.17.0"
+uvicorn = "^0.23.1"
+pydantic-settings = "^2.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
