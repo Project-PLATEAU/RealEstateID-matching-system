@@ -59,18 +59,33 @@
 
 ## 5. 利用技術
 
-| 種別              | 名称              | バージョン | 内容 |
+| 種別              | 名称              | バージョン   | 内容                        |
 | ----------------- | ------------------|-------------|-----------------------------|
-| ライブラリ        | [PostGIS](https://postgis.net/) | 15.3.3 |リレーショナルデータベースPostgreSQLに地理空間データの管理機能を拡張するためのライブラリス
-|                   | [Psycopg2](https://pypi.org/project/psycopg2/)| 2.9.9 | SQLデータベースをPythonで利用するためのライブラリ（PostGISにアクセスするために使用）
-|                   | [Psycopg3](https://www.psycopg.org/psycopg3/)| 3.1 | PythonでデータベースPostGISに接続・SQL発行するためのライブラリ
-|                   | [Jageocoder](https://www.info-proto.com/jageocoder/) | 2.1.1 | 住所ジオコーダライブラリ（不動産登記情報の所在地を登記所備付地図と突合するために使用）
-|                   | [Python標準ライブラリ](https://www.python.jp/)| 3.8.10 |Python とともに配付されている標準ライブラリ
-|                   | [GEOS](https://libgeos.org/) | 3.1.0 |地理空間情報を処理するためのオープンソースライブラリ（Geometry Engine Open Source）
-|                   | [Proj4](https://proj.org/) | 4.5.0 | 空間参照系変換ライブラリ（Geometry Engine Open Source） |
-|                   | [AWS boto3](https://aws.amazon.com/jp/sdk-for-python/)| 3 |PythonからAWSの各種サービスを利用するためのライブラリ
-|                   | [GDAL(ogr2ogr)](https://gdal.org/)| 3.8.3 | CityGMLファイルの解析・PostGISデータ投入用のライブラリとして利用
-| フレームワーク     | [vue](https://ja.vuejs.org/) | 3.3.4 |Web ユーザーインターフェース構築のためのフレームワーク
+| ライブラリ | [AWSboto3](https://aws.amazon.com/jp/sdk-for-python/) | 3 | PythonからAWSの各種サービスを利用するためのライブラリ |
+|    | [GDAL(ogr2ogr)](https://gdal.org/) | 3.8.3 | CityGMLファイルの解析・PostGISデータ投入用のライブラリとして利用 |
+|  | [GEOS](https://libgeos.org/) | 3.1.0 | 地理空間情報を処理するためのオープンソースライブラリ（GeometryEngineOpenSource） | 
+|  | [Jageocoder](https://www.info-proto.com/jageocoder/) | 2.1.1 | 住所ジオコーダライブラリ（不動産登記情報の所在地を登記所備付地図と突合するために使用） | 
+|  | [PostGIS](https://postgis.net/) | 15.3.3 | リレーショナルデータベースPostgreSQLに地理空間データの管理機能を拡張するためのライブラリス | 
+|  | [Proj4](https://proj.org/) | 4.5.0 | 空間参照系変換ライブラリ（GeometryEngineOpenSource） | 
+|  | [Psycopg2](https://pypi.org/project/psycopg2/) | 2.9.9 | SQLデータベースをPythonで利用するためのライブラリ（PostGISにアクセスするために使用） | 
+|  | [Psycopg3](https://www.psycopg.org/psycopg3/) | 3.1 | PythonでデータベースPostGISに接続・SQL発行するためのライブラリ | 
+|  | [Python標準ライブラリ](https://www.python.jp/) | 3.8.10 | Pythonとともに配付されている標準ライブラリ | 
+|  | [fastapi](https://fastapi.tiangolo.com/) | 0.100.1 | CityGMLファイルのアップロードの機能を提供するために利用したWebフレームワーク | 
+|  | [install](https://pypi.org/project/install/) | 1.3.5 | PIPパッケージのインストール用ライブラリ | 
+|  | [jmespath](https://pypi.org/project/jmespath/) | 1.0.1 | JSONから必要な情報をフィルタリングするJMESPath記法を用いるためのライブラリ。 | 
+|  | [lxml](https://pypi.org/project/lxml/) | 5.1.0 | PythonでCityGML等のXMLを解析・要素追加・値の加工等を行うためのXML操作ライブラリ | 
+|  | [mangum](https://pypi.org/project/mangum/) | 0.17.0 | FastAPIのアプリケーションをAWSLambdaで動かすためのインタフェースを提供するGlueライブラリ | 
+|  | [Pillow](https://pypi.org/project/pillow/) | 9.0.1 | Pythonで簡単な画像処理を行うためのライブラリ | 
+|  | [psycopg2-binary](https://pypi.org/project/psycopg2/) | 2.9.9 | PythonからPostgreSQL(PostGIS)にアクセスするためのDB接続用ライブラリ。 | 
+|  | [pydantic-settings](https://pypi.org/project/pydantic-settings/) | 2.0.2 | FastAPIのアプリケーションからパラメータ類をクラスとして扱うために利用するPydanticライブラリ | 
+|  | [python-dateutil](https://pypi.org/project/python-dateutil/) | 2.8.2 | Pythonで日付情報を簡単に扱うためのユーティリティライブラリ | 
+|  | [python-dotenv](https://pypi.org/project/python-dotenv/) | 1.0.0 | Pythonで.env環境変数定義ファイルを扱うために利用するユーティリティライブラリ | 
+|  | [pytz](https://pypi.org/project/pytz/) | 2023.3.post1 | Pythonから日付のタイムゾーン情報を簡単に扱うために利用するユーティリティライブラリ | 
+|  | [requests](https://pypi.org/project/requests3/) | 2.31.0 | Pythonで簡易的に利用できるヘッドレスブラウザ機能を提供するライブラリ | 
+|  | [s3transfer](https://pypi.org/project/s3transfer/) | 0.10.0 | PythonからAWSS3バケットの情報を扱うためのライブラリ。AWSboto3に含まれる。 | 
+|  | [six](https://pypi.org/project/six/) | 1.16.0 | Python2とPython3の互換性を保つために利用されるライブラリ。導入ライブラリの一部の古い処理を動かすために利用されている。 | 
+|  | [urllib3](https://pypi.org/project/urllib3/) | 2.0.7 | requestsライブラリが内部的に利用しているURL処理用ライブラリ | 
+| フレームワーク | [vue](https://ja.vuejs.org/) | 3.3.4 | Webユーザーインターフェース構築のためのフレームワーク | 
 
 ## 6. 動作環境 <!-- 動作環境についての仕様を記載ください。 -->
 | 項目               | 最小動作環境                 | 推奨動作環境  | 
