@@ -9,12 +9,13 @@
 
 ## 2. 「不動産IDマッチングシステム」について <!-- 「」内にユースケース名称を記載ください。本文は以下のサンプルを参考に記載ください。URLはアクセンチュアにて設定しますので、サンプルそのままでOKです。 -->
 「不動産IDマッチングシステム」は、3D都市モデルを介して不動産IDに紐づけられた様々な建物情報の利活用促進を目指すことを目的として開発しました。
-本システムは、不動産登記及び登記所備付地図からマッチング用の「不動産ID空間データ構築環境」とPLATEAUの3D都市モデルの建築物データに不動産IDを付与する「不動産IDマッチングサービス環境」を実装しています。また、不動産IDが付与された3D都市モデルの建築物データをLinked Open Dataに変換し、Linked Open Dataの参照解決を行う「不動産IDマッチングLinked Open Data環境」を実装しています。
+本システムは、不動産登記及び登記所備付地図からマッチング用の「不動産ID空間データ構築環境」とPLATEAUの3D都市モデルの建築物データに不動産IDを付与する「不動産IDマッチングサービス環境」を実装しています。
+
 本システムは、一般ユーザ向けのGUIを備えたオープンソースソフトウェアとしてフルスクラッチで開発されています。
-本システムの詳細については[技術検証レポート](https://www.mlit.go.jp/plateau/file/libraries/doc/plateau_tech_doc_0030_ver01.pdf)を参照してください。
+本システムの詳細については[技術検証レポート](http://XXXX)を参照してください。
 
 ## 3. 利用手順 <!-- 下記の通り、GitHub Pagesへリンクを記載ください。URLはアクセンチュアにて設定しますので、サンプルそのままでOKです。 -->
-本システムの構築手順及び利用手順については[利用チュートリアル](https://r5-plateau-acn.github.io/SolarPotential/)を参照してください。
+本システムの構築手順及び利用手順については[利用チュートリアル](http://XXXX)を参照してください。
 
 ## 4. システム概要 <!-- OSS化対象のシステムが有する機能を記載ください。 -->
 ### 【不動産ID空間データ構築環境】
@@ -56,26 +57,20 @@
 #### ⑪CityGML更新機能
 - マッチング結果から3D都市モデルの建築物データに不動産IDを付与し出力します。
 
-### 【不動産IDマッチングLinked Open Data環境】
-#### ⑫RDF変換・登録機能
-- 不動産IDが付与された3D都市モデル建築物データをRDFに変換し、Firebase Cloud Firestore及び、RDFストアに登録します。
-
-#### ⑬LODの参照解決機能
-- HTTPのGETリクエストで指定された形式でLODを返却します。
-##### ※「不動産IDマッチングLinked Open Data環境」は「PLATEAU Linked Open Data 配信システム」（https://…………………）において公開しています。
-
 ## 5. 利用技術
 
-| 種別              | 名称   | バージョン | 内容 |
-| ----------------- | --------|-------------|-----------------------------|
-| ミドルウェア      | [poetry](https://python-poetry.org/) | 1.3.2 | Pythonライブラリの管理 |
-| ライブラリ        | [GeoAlchemy2](https://geoalchemy-2.readthedocs.io/) | 0.10.2 | SQL データベースを Python で利用するためのライブラリ <br> SQLAlchemyの空間データベース機能拡張（PostGIS にアクセスするために使用） |
-|       | [Jageocoder](https://www.info-proto.com/jageocoder/) | 2.0.0 | 住所ジオコーダライブラリ（不動産登記情報における建物所在地を登記所備付地図と突合するために使用） |
-|       | [GEOS](https://libgeos.org/) | 3.1.0 | 地理空間情報を処理するためのオープンソースライブラリ（Geometry Engine Open Source） |
-|       | [Proj4](https://proj.org/) | 4.5.0 | 空間参照系変換ライブラリ |
-|       | [React.js](https://react.dev/) | 18.2.0 | ユーザインターフェース構築のための JavaScript ライブラリ |
-| フレームワーク    | [React.js](https://ja.react.dev/) | 18.2.0 | ユーザインターフェース構築のための JavaScript ライブラリ |
-| データベース      | [Virtuoso](https://virtuoso.openlinksw.com/) | 7.2.9 | RDF Store（RDFに対してSPARQLでクエリできるデータベース。VirtuosoはGeoSPARQLにも対応している） |
+| 種別              | 名称              | バージョン | 内容 |
+| ----------------- | ------------------|-------------|-----------------------------|
+| ライブラリ        | [PostGIS](https://postgis.net/) | 15.3.3 |リレーショナルデータベースPostgreSQLに地理空間データの管理機能を拡張するためのライブラリス
+|                   | [Psycopg2](https://pypi.org/project/psycopg2/)| 2.9.9 | SQLデータベースをPythonで利用するためのライブラリ（PostGISにアクセスするために使用）
+|                   | [Psycopg3](https://www.psycopg.org/psycopg3/)| 3.1 | PythonでデータベースPostGISに接続・SQL発行するためのライブラリ
+|                   | [Jageocoder](https://www.info-proto.com/jageocoder/) | 2.1.1 | 住所ジオコーダライブラリ（不動産登記情報の所在地を登記所備付地図と突合するために使用）
+|                   | [Python標準ライブラリ](https://www.python.jp/)| 3.8.10 |Python とともに配付されている標準ライブラリ
+|                   | [GEOS](https://libgeos.org/) | 3.1.0 |地理空間情報を処理するためのオープンソースライブラリ（Geometry Engine Open Source）
+|                   | [Proj4](https://proj.org/) | 4.5.0 | 空間参照系変換ライブラリ（Geometry Engine Open Source） |
+|                   | [AWS boto3](https://aws.amazon.com/jp/sdk-for-python/)| 3 |PythonからAWSの各種サービスを利用するためのライブラリ
+|                   | [GDAL(ogr2ogr)](https://gdal.org/)| 3.8.3 | CityGMLファイルの解析・PostGISデータ投入用のライブラリとして利用
+| フレームワーク     | [vue](https://ja.vuejs.org/) | 3.3.4 |Web ユーザーインターフェース構築のためのフレームワーク
 
 ## 6. 動作環境 <!-- 動作環境についての仕様を記載ください。 -->
 | 項目               | 最小動作環境                 | 推奨動作環境  | 
@@ -104,5 +99,5 @@
 - 本リポジトリの利用により生じた損失及び損害等について、国土交通省はいかなる責任も負わないものとします。
 
 ## 10. 参考資料 <!-- 技術検証レポートのURLはアクセンチュアにて記載します。 -->
-- 技術検証レポート: https://www.mlit.go.jp/plateau/file/libraries/doc/plateau_tech_doc_0030_ver01.pdf
-- PLATEAU WebサイトのUse caseページ「不動産IDマッチングシステム」: https://www.mlit.go.jp/plateau/use-case/uc22-013/
+- 技術検証レポート: http://XXXX
+- PLATEAU WebサイトのUse caseページ「不動産IDマッチングシステム」: https://www.mlit.go.jp/plateau/use-case/dt23-03/
