@@ -115,4 +115,4 @@
 
 ## 10. 参考資料 <!-- 技術検証レポートのURLはアクセンチュアにて記載します。 -->
 - 技術検証レポート: http://XXXX
-- PLATEAU WebサイトのUse Caseページ「不動産IDマッチングシステム」: https://www.mlit.go.jp/plateau/use-case/dt23-03/
+- PLATEAU WebサイトのUse Caseページ「3D都市モデル・不動産IDマッチングシステム」: https://www.mlit.go.jp/plateau/use-case/dt23-03/
