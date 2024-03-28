@@ -14,7 +14,7 @@
 本システムの詳細については[技術検証レポート](https://www.mlit.go.jp/plateau/file/libraries/doc/XXXX)を参照してください。
 
 ## 3. 利用手順
-本システムの構築手順及び利用手順については[利用チュートリアル](https://project-plateau.github.io/RealEstateID-matching-system/)を参照してください。
+本システムの構築手順及び利用手順については[利用チュートリアル](https://project-plateau.github.io/RealEstateID-matching-system/)を参照してください。  
 ※本システムは不動産番号、所在地、家屋番号、地番などの不動産登記の情報をデータ化した「不動産登記データ」及び[「法務省登記所備付地図」](https://front.geospatial.jp/moj-chizu-xml-download/)の利用を前提としています。  
 
 ## 4. システム概要
