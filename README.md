@@ -1,4 +1,4 @@
-![image](https://github.com/Project-PLATEAU/RealEstateID-matching-system/assets/148931378/c742d82e-e05e-40c3-901d-30922ed45409)# 不動産IDマッチングシステム 
+# 不動産IDマッチングシステム 
 
 ![概要](./img/ui.png) 
 
