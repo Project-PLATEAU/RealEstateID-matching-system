@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>データ構築環境作成 </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="データ構築環境作成 ">
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="データ構築環境作成">データ構築環境作成</h1>
+
+<p>「不動産IDマッチングシステム」で利用するマッチングのためのデータ「不動産ID空間データ」の作り方について説明します。<br>
+なお、データ作成に利用する「不動産登記データ」は非公開のため、個人情報等を含まないダミーデータをサンプルとして収録しています。</p>
+<h2 id="不動産id空間データとは">「不動産ID空間データ」とは</h2>
+<p>不動産IDマッチングシステムは、3D都市モデルの建築物データに含まれる建物形状、高さ、建物構造などの情報と、不動産登記データに含まれる床面積や階数などの情報を比較し、最も一致する率の高い不動産登記の「不動産番号」をもとに建物の不動産IDを計算します。<br>
+また、建物データの座標と不動産登記データの所在地の座標が一致していることを確認するため、登記所備付地図を利用して所在地に対応する座標の範囲（ポリゴン）を求めています。<br>
+この処理を高速に行うために、不動産登記データと登記所備付地図を、地理情報を管理できるリレーショナルデータベース（PostGIS）に検索可能な形で登録した空間データベースを作成しておく必要があります。<br>
+このデータベースを「不動産ID空間データ」と呼んでいます。</p>
+<p>これ以降で説明するのは、下図右側の「変換」に当たる処理を行い、入力データから不動産ID空間データを作成する手順です。</p>
+<img src="../resources/realestate_id_data.png" width="742" height="242" title="不動産ID空間データ" style="border: 1px solid #888;">
+<h2 id="必要なデータセット">必要なデータセット</h2>
+<p>不動産ID空間データを作成するには、対象とする地域の以下のデータが必要です。<br>
+不動産登記（建物・土地）データはCSV形式、登記所備付地図データは、GeoJSON形式のものを用意してください。</p>
+<ul>
+<li><p>不動産登記（建物）データ<br>
+不動産登記（建物）データには、建物の不動産番号のほか、建物の面積や階数、用途種別などマッチングに最も必要な情報が含まれています。</p>
+</li>
+<li><p>不動産登記（土地）データ<br>
+不動産登記（土地）データは上の図では省略していますが、土地の分筆や合筆の履歴、土地の不動産番号が含まれています。<br>
+建物の新築時の登記に記載されている所在地は登記時点のものであり、それ以降に他の土地と合筆された場合には現存しないことがあります。<br>
+登記時点の所在地記載を現在の所在地に変換するため、土地の履歴を利用する必要があります。<br>
+また、分譲マンションなどの区分所有建物の不動産IDは「土地の不動産番号」から計算すると決められているため、そこでも土地の登記データを利用します。</p>
+</li>
+<li><p>登記所備付地図データ<br>
+登記所備付地図データは、不動産登記（建物）データと不動産登記（土地）データに含まれる所在地に対応する座標を計算するために利用します。</p>
+</li>
+</ul>
+<h2 id="不動産id空間データ作成手順">「不動産ID空間データ」作成手順</h2>
+<ul>
+<li><p>Docker環境構築<br>
+データ作成にはPostGISやGDAL、Pythonなどが必要ですが、Dockerを利用すると環境構築を自動的に行うことができます。
+使用するOSに合わせて<a href="https://docs.docker.com/get-docker/">Docker DesktopまたはDocker Engineをインストール</a>してください。</p>
+</li>
+<li><p>PostGIS起動<br>
+不動産ID空間データはPostGIS上に構築されるため、まずはPostGISをバックグランド（ディタッチドモード）で起動してください。</p>
+<pre><code>  $ docker compose up -d postgis_realestate
+</code></pre>
+</li>
+<li><p>入力データファイルを配置</p>
+<p>inputディレクトリに入力データファイルを配置します。</p>
+<p>サンプルデータを利用する場合は、sampleディレクトリの下にある <code>37201_dummy_tatemono.csv.gz</code>、<code>37201_dummy_tochi.csv.gz</code>、<code>37201_sample.geojson.gz</code>の3ファイルをinputディレクトリにコピーしてください。</p>
+<pre><code>  $ cp sample/*.gz input/
+</code></pre>
+<ul>
+<li><p>不動産登記（建物）データのファイル名は必ず<code>*_tatemono*.csv.gz</code>にマッチする必要があります（*はワイルドカード）。ファイルフォーマットはCSVをgzipで圧縮してください。</p>
+</li>
+<li><p>不動産登記（土地）データのファイル名は必ず<code>*_tochi*.csv.gz</code>にマッチする必要があります（*はワイルドカード）。ファイルフォーマットはCSVをgzipで圧縮してください。</p>
+</li>
+<li><p>登記所備付地図データのファイル名は必ず<code>*.geojson.gz</code>にマッチする必要があります（*はワイルドカード）。ファイルフォーマットはGeoJSONをgzipで圧縮してください。</p>
+</li>
+</ul>
+</li>
+<li><p>データ作成スクリプトを実行</p>
+<p>realestate_id_dbサービスを実行すると作成処理を実行します。</p>
+<pre><code>  $ docker compose run --rm realestate_id_db
+</code></pre>
+<p>正常に処理が完了すると<code>work/realestate_id_db-YYYYMMDD_hhmmss.dump.gz</code>に不動産ID空間データをすべて含むPostGISダンプファイルが生成されます。なお、YYYYMMDDは処理を開始した年月日、hhmmssは時分秒です。</p>
+<p>このダンプファイルをマッチングシステムのPostGISに読み込めば、3次元都市モデルの建物ポリゴンとのマッチングを行うことができます。</p>
+</li>
+<li><p>作業用Dockerコンテナ・イメージの削除</p>
+<p>作業が終わり、それ以降はデータ作成用のDockerコンテナを利用しない場合は、以下のコマンドにより作成したコンテナを削除します。</p>
+<pre><code>  $ docker compose down -v
+</code></pre>
+<p>また、イメージも不要であれば削除して構いません。</p>
+<pre><code>  $ docker rmi postgis_realestate
+  $ docker rmi realestate_id_db
+</code></pre>
+</li>
+</ul>
+<p>不動産ID空間データを作成する手順は以上です。</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

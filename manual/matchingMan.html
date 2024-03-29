@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>サービス環境実行方法 </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="サービス環境実行方法 ">
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="サービス環境実行方法">サービス環境実行方法</h1>
+
+<h2 id="概要">概要</h2>
+<p>建物のCityGMLを入力とし、不動産IDを付与したCityGMLを出力するスクリプトです。</p>
+<h2 id="ディレクトリ構成">ディレクトリ構成</h2>
+<p>本スクリプトを実行するためのディレクトリ構成は以下の通りです。</p>
+<p>/estate_id_batch
+/batch
+/data
+/input
+/output
+/src
+main.py
+Dockerfile</p>
+<h2 id="前提条件">前提条件</h2>
+<ul>
+<li>本スクリプトは、Dockerコンテナ、および、AWS Batch環境で実行することを想定しています。予め利用OSにDocker環境をインストールしておいてください。</li>
+<li>処理可能なのは建物のCityGMLのみです。そのほかの種類のCityGMLは処理できません。</li>
+</ul>
+<h2 id="実行手順">実行手順</h2>
+<p>本スクリプトをWindows PowerShellで実行する場合は、以下の手順で実行してください。</p>
+<ol>
+<li>Dockerfileファイルが置かれているディレクトリに移動します。</li>
+</ol>
+<pre><code>PS C:\estate_id_batch\batch&gt; cd estate_id_batch/batch
+</code></pre>
+<ol start="2">
+<li>Dockerfileファイルからdocker buildを行い、ローカルマシンにイメージを作成します。</li>
+</ol>
+<pre><code>PS C:\estate_id_batch\batch&gt; docker build -t estate_matching_image .
+</code></pre>
+<p>出力結果例:</p>
+<pre><code> =&gt; [internal] load build definition from Dockerfile                                                                           0.0s
+ =&gt; =&gt; transferring dockerfile: 32B                                                                                            0.0s
+ =&gt; [internal] load .dockerignore                                                                                              0.0s
+ =&gt; =&gt; transferring context: 2B                                                                                                0.0s
+ =&gt; [internal] load metadata for ghcr.io/osgeo/gdal:ubuntu-small-3.7.1                                                         1.0s
+ =&gt; [internal] load build context                                                                                              0.0s
+ =&gt; =&gt; transferring context: 49.64kB                                                                                           0.0s
+ =&gt; [1/6] FROM ghcr.io/osgeo/gdal:ubuntu-small-3.7.1@sha256:25c22fd2d889a09362ec12b39ddf26530198a2943fbf8160c7b921ac86c50e6a   0.0s
+ =&gt; CACHED [2/6] RUN apt-get update &amp;&amp;     apt-get install -y postgresql-client &amp;&amp;     apt-get install -y python3-pip          0.0s
+ =&gt; CACHED [3/6] RUN pip install boto3 psycopg2-binary install python-dotenv lxml requests pytz                                0.0s
+ =&gt; CACHED [4/6] WORKDIR /app                                                                                                  0.0s
+ =&gt; CACHED [5/6] RUN mkdir /app/data                                                                                           0.0s
+ =&gt; [6/6] COPY src /app/src                                                                                                    0.0s
+ =&gt; exporting to image                                                                                                         0.0s
+ =&gt; =&gt; exporting layers                                                                                                        0.0s
+ =&gt; =&gt; writing image sha256:4cca64457fea7f0e571a2ebccb4c3822a3aac7b636cd5430ba9fcf19b67f6464                                   0.0s
+ =&gt; =&gt; naming to docker.io/library/estate_matching_image                                                                       0.0s
+</code></pre>
+<ol start="3">
+<li>buildが完了したイメージを実行します。</li>
+</ol>
+<p>次のコマンドを用いて、イメージ内で使っているOS（Linux）にログインします。</p>
+<pre><code>docker run -it -v ${pwd}:/app estate_matching_image bash
+</code></pre>
+<ol start="4">
+<li>イメージ内のOSに環境変数を定義します。</li>
+</ol>
+<pre><code>root@0344a7d63e05:/app# export USE_ESTATE_ID_CONFIRMATION_SYSTEM=0
+root@0344a7d63e05:/app# export NO_USE_IAM_MODE=1
+root@0344a7d63e05:/app# export ESTATE_ID_USER_ID=[任意のユーザID文字列]
+root@0344a7d63e05:/app# export ESTATE_ID_SESSION_ID=[任意のセッションID文字列]
+</code></pre>
+<ol start="5">
+<li>CityGMLファイルをdata/input以下のディレクトリに配置します。</li>
+</ol>
+<p>スクリプトで処理するCityGMLの配置ディレクトリにはルールがあり、</p>
+<p>data/input/[ESTATE_ID_USER_ID]/[ESTATE_ID_SESSION_ID]というディレクトリから処理するCityGMLファイルを読み取ります。</p>
+<p>data/input/[ESTATE_ID_USER_ID]/[ESTATE_ID_SESSION_ID]ディレクトリを作成し、その中にCityGMLファイルを配置してください。</p>
+<p>例：</p>
+<ul>
+<li>ESTATE_ID_USER_ID: matsuyama</li>
+<li>ESTATE_ID_SESSION_ID: session_1
+と設定している場合、</li>
+</ul>
+<p>data/input/matsuyama/session_1というディレクトリを作成し、その中に処理をするCityGMLファイルを配置してください。</p>
+<ol start="6">
+<li>pythonスクリプトsrc/main.pyを実行します。</li>
+</ol>
+<pre><code>root@0344a7d63e05:/app# python src/main.py
+</code></pre>
+<p>実行時のログが画面に出力されます。</p>
+<pre><code>data/input/test-user/matsuyama_session_1
+Download completed.
+lod0RoofEdge
+50324684_bldg_6697_op.gmlをインポート中...
+50324684_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+50324685_bldg_6697_op.gmlをインポート中...
+50324685_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+50324686_bldg_6697_op.gmlをインポート中...
+50324686_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+50324687_bldg_6697_op.gmlをインポート中...
+50324687_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+50324694_bldg_6697_op.gmlをインポート中...
+50324694_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+50324695_bldg_6697_op.gmlをインポート中...
+50324695_bldg_6697_op.gmlをインポート完了
+lod0RoofEdge
+
+...（略）...
+
+50325567_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 6件
+50325568_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 237件
+50325569_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 14件
+50325574_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ追加件数: 0件
+50325575_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 5件
+50325576_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ追加件数: 0件
+50325577_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 538件
+50325578_bldg_6697_op.gmlにマッチング結果を付与マッチング処理...
+uro_uri https://www.geospatial.jp/iur/uro/3.0
+マッチングデータ件数: 2493件
+delete building_citygml_matched, building_citygml table data.
+desirialize
+</code></pre>
+<ol start="7">
+<li>data/outputディレクトリにディレクトリが生成され、処理したCityGMLファイルが保存されていることを確認します。</li>
+</ol>
+<h2 id="諸注意">諸注意</h2>
+<ul>
+<li>本スクリプトは、Dockerコンテナ、および、AWS Batch環境で実行することを想定しています。</li>
+<li>一度に処理するファイル数は、50個程度に留めてください。</li>
+<li>DBはAIGID AWSのRDSを利用しています。特定のIPアドレスからのみアクセス可能です。</li>
+</ul>
+<p>以上</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
